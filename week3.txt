@@ -1,0 +1,123 @@
+db.Tweets.find({})
+
+//operator in
+db.Tweets.find({"user.name" :{$in:["user 01", "user 02", "user 03"]}})
+
+//operator not in (nin)
+db.Tweets.find({"user.name" :{$nin:["user 01", "user 02", "user 03"]}})
+
+//combining two operators
+db.Tweets.find({"user.name" :{$not:{$nin:["user 01", "user 02", "user 03"]}}})
+db.Tweets.find({"user.name" :{$not:{$nin:["user 01", "user 02", "user 03"]}}})
+db.Tweets.find({"user.name" :{$not:{$in:["user 01", "user 02", "user 03"]}}})
+
+//exists
+db.Tweets.insert({"new":false})  
+db.Tweets.find({"new" :{$exists:true}})
+db.Tweets.find({"user" :{$exists:true}})
+db.Tweets.find({"user" :{$exists:false}})
+db.Tweets.find({"new" :{$exists:false}})
+
+//lesser than $lt
+db.Tweets.find({"user.id" :{$lt:224499494505}})
+
+//greater than
+db.Tweets.find({"user.id" :{$gt:224499494505}})
+//using both greater than and less than
+db.Tweets.find({"user.id" :{$gt:224499494505, $lt: 224499494545}})
+
+db.Tweets.find({"user.name" :{$gt:"user 05", $lt:"user 15"}})
+
+//1. Write a MongoDB query to retrieve all documents from the Tweets collection where user names do not equal "user 30" and "user 40".
+db.Tweets.find({"user.name" :{$nin:["user 30", "user 40"]}})
+//or
+db.Tweets.find({"user.name" :{$not :{$in:["user 30", "user 40"]}}})
+
+// 2. Write a MongoDB query that returns all Tweets in which the field “tag” has values. Note that not all the Tweets have tags, obviously.
+db.Tweets.find({"tag":{$exists:true}})
+
+// 4. Write a MongoDB query to find the Tweets where the Tweet id (i.e., id_str) is greater than 8000000000000000000 but less than 9000000000000000000.
+db.Tweets.find({"id_str" :{$gt:"8000000000000000000", $lt: "9000000000000000000"}})
+
+// 10. Write a MongoDB query to update a user’s (user name is ‘user 21’) screen_name as ‘Superman’
+db.Tweets.update({"user.name":"user 21"}, {$set:{"user.screen_name" : "Superman"}})
+
+//Write a MongoDB query to retrieve all documents from the Tweets collection where user id is not 224499494502
+db.Tweets.find({"user.id" :{$ne:224499494502}})
+
+
+//regex = regular expressions
+db.Tweets.find({"text":/Sydney/})
+db.Tweets.find({"text":"Sydney"})
+db.Tweets.find({"text":{$regex :"Sydney"}})
+db.Tweets.find({"text":{$regex :/Sydney/}})
+
+//^   -> Find something starting with
+db.Tweets.find({"text":/^Excited/})
+db.Tweets.find({"text":/^Sydney/})
+
+// End with it!
+db.Tweets.find({"text":/it!/})
+
+//Display Operations
+db.Tweets.find({"text":/it!/},{"user" : 1})
+db.Tweets.find({"text":/it!/},{"user.name" : 1})
+
+//display 0 :not display, others: display
+db.Tweets.find({"text":/it!/},{"user.name" : 0})
+db.Tweets.find({"text":/it!/},{"user.name" : -1})
+
+
+//sort
+// sort 1 : ascending order
+db.Tweets.find({}).sort({"user.name":1})
+// sort 1 : descending order
+db.Tweets.find({}).sort({"user.name":-1})
+//gives error
+db.Tweets.find({}).sort({"user.name":0})
+db.Tweets.find({}).sort({"user.name":10})
+// there is descending and ascending nothing else.
+
+//gives error
+db.Tweets.find({"text":/it!/},{"user.name" : 1, "user.id":0})
+
+//willnot display user name and user id
+db.Tweets.find({"text":/it!/},{"user.name" : 0, "user.id":0})
+
+
+//count
+db.Tweets.find({}).count()
+
+//limit -> displays upto this limit
+db.Tweets.find({}).limit(1)
+db.Tweets.find({}).limit(15)
+
+//displays all of the document
+db.Tweets.find({}).limit(0)
+db.Tweets.find({}).limit(-1)
+
+//
+db.Tweets.find({}).limit(13).count()
+
+// 3. Write a MongoDB query to display the first 10 Tweets which have the screen name with value "Twitter User" (i.e., "screen_name": "Twitter User").
+db.Tweets.find({"user.screen_name":"Twitter User"}).limit(10)
+
+// 5. Write a MongoDB query to return the "Tweet Id", "name" and "location" fields for those Tweets, which contain "Thu" as first three letters for its "created_at" field
+db.Tweets.find({"created_at":/^Thu/},{"id_str" : 1, "user.name":1, "user.location":1})
+
+// 6. Write a MongoDB query to find the Tweet Id ("id_str") for those Tweets, which contain the keyword “Sydney” in their text.
+db.Tweets.find({"text":/Sydney/},{"id_str" : 1})
+
+// 7. Write a MongoDB query to count the number of the Tweets whose user id is greater than 224499494502 but less than 224499494522
+db.Tweets.find({"user.id" :{$gt:224499494502, $lt: 224499494522}}).count()
+
+// 8. Write a MongoDB query to sort all the Tweets in descending order according to the created time ("created_at"). Repeat the question and output in ascending order.
+db.Tweets.find({}).sort({"created_at":-1})
+db.Tweets.find({}).sort({"created_at":1})
+
+// 9. Write a MongoDB query to find the three earliest tweets (according to created time)
+db.Tweets.find({}).sort({"created_at":1}).limit(3)
+
+// 13. Write a MongoDB query to retrieve all documents from the Tweets collection where user names do not equal "user 30" and "user 40".
+db.Tweets.find({"user.name" :{$nin:["user 30", "user 40"]}})
+
