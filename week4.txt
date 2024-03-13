@@ -1,0 +1,28 @@
+db.getCollection("Tweets").find({})
+
+//update
+// db.Tweets.update({query part},{update part})
+db.Tweets.update({"user.name":"user 30"}, {$set:{"user.url":"updated url"}})
+//true or false we get the same thing
+db.Tweets.update({"user.name":"user 30"}, {$set:{"user.url":"updated url"}, $currentDate:{"updated_time": true}})
+db.Tweets.update({"user.name":"user 41"}, {$set:{"user.url":"updated url"}, $currentDate:{"updated_time": false}})
+
+//updateMany
+db.Tweets.updateMany({"user.url":"updated url"}, {$set:{"user.url":"new updated url"}, $currentDate:{"updated_time": false}})
+
+//replaceOne
+// db.Tweets.replaceOne({query part},{new doc})
+db.Tweets.replaceOne({"user.name":"user 41"}, {"user_name":"updated url"})
+
+//deleteand deleteMany
+db.Tweets.deleteOne({"user.name":"user 20"})
+db.Tweets.deleteMany({"user.name": {$in:["user 21","user 22"]}})
+
+//remove
+db.Tweets.remove({"user.name": {$in:["user 23","user 24"]}})
+
+//Question 1
+db.Tweets.update({"user.name":"user 21"}, {$set:{"user.screen_name": "Superman"}, $currentDate:{"updated_time":false}})
+
+//Question2 
+db.Tweets.deleteOne({"user.screen_name":"Superman"})
